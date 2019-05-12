@@ -77,7 +77,7 @@ data class Container(
                 val props = map.getMap("properties")
                     val track = Track(
                             map.getInt("id"),
-                            props.getString("title"),
+                            props.getString("track_name"),
                             props.getString("language"),
                             map.getString("type"),
                             map.getString("codec")

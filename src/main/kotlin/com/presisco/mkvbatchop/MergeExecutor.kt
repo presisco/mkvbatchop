@@ -3,7 +3,6 @@ package com.presisco.mkvbatchop
 import com.presisco.mkvbatchop.mkvtoolnix.MKVMergeHelper
 import com.presisco.mkvbatchop.model.Profile
 import com.presisco.mkvbatchop.model.Task
-import com.presisco.toolbox.concurrent.CollectionOperator
 
 class MergeExecutor(
         mkvmergePath: String
@@ -17,6 +16,6 @@ class MergeExecutor(
     }
     */
 
-    fun execute(outputs: List<Task>, profile: Profile) = outputs.forEach { mkvmerge.merge(it, profile) }
+    fun execute(outputs: List<Task>, profile: Profile) = outputs.map { mkvmerge.merge(it, profile) }
 
 }

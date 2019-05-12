@@ -62,7 +62,6 @@ object Preference {
 
     fun newProfile(name: String) = Profile(
             name,
-            0,
             mutableListOf(newProfileOrder("directory"))
     )
 

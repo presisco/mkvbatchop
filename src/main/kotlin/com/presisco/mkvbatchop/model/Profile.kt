@@ -2,13 +2,11 @@ package com.presisco.mkvbatchop.model
 
 data class Profile(
         val name: String,
-        var chapters: Int,
         val orders: MutableList<Order>
 ) {
 
     fun toMap() = mapOf(
             "name" to name,
-            "chapters" to chapters,
             "orders" to orders.map { it.toMap() }
     )
 
@@ -49,7 +47,6 @@ data class Profile(
 
         fun fromMap(map: Map<String, Any>) = Profile(
                 map.getOrDefault("name", "default") as String,
-                (map["chapters"] as Number).toInt(),
                 (map["orders"] as List<Map<String, Any>>).map { Order.fromMap(it) }.toMutableList()
         )
     }

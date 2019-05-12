@@ -1,11 +1,9 @@
 package com.presisco.mkvbatchop.ui
 
 import com.presisco.mkvbatchop.*
-import com.presisco.mkvbatchop.mkvtoolnix.MKVMergeHelper
 import com.presisco.mkvbatchop.model.Container
 import com.presisco.mkvbatchop.model.Task
 import com.presisco.mkvbatchop.model.Track
-import javafx.application.Platform
 import javafx.collections.FXCollections
 import javafx.scene.control.*
 import javafx.stage.DirectoryChooser
@@ -28,7 +26,7 @@ class MainDialog : View() {
     private val controller: MainDialogController by inject()
 
     override val root = borderpane {
-        top = ProfilePane(controller.profileMap) { controller.selectProfile(it) }.root
+        top = ProfilePane(controller.profileMap, { controller.selectProfile(it) }, { controller.selectProfile(it) }).root
         left = vbox {
             label { text = "task list" }
             taskListView = listview(controller.taskList) {
@@ -139,8 +137,17 @@ class MainDialog : View() {
                     executeButton.isDisable = true
                     runAsync {
                         controller.merge()
-                    } ui {
+                    } ui { outputList ->
                         executeButton.isDisable = false
+                        val errors = outputList.filter { it.contains("Error: ") }
+                        if (errors.isNotEmpty()) {
+                            with(Alert(Alert.AlertType.ERROR)) {
+                                title = "Merge Error!"
+                                contentText = errors.joinToString { it }
+                                initOwner(currentWindow)
+                                show()
+                            }
+                        }
                     }
                 }
             }
@@ -234,7 +241,6 @@ class MainDialogController : Controller() {
         taskList.addAll(taskWarehouse.tasks)
     }
 
-    fun merge(){
-        mergeExecutor.execute(taskWarehouse.tasks, currentProfile)
-    }
+    fun merge(): List<String> = mergeExecutor.execute(taskWarehouse.tasks, currentProfile)
+
 }

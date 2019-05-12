@@ -143,7 +143,7 @@ class TrackConfigBox(
         conf["offset"]?.let {
             val offset = it as Number
             offsetCheckBox.isSelected = true
-            offsetText.text = offset.toString()
+            offsetText.text = offset.toInt().toString()
 
         }?: clearOffset()
     }
